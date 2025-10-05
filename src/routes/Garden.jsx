@@ -1,8 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
-import { Stage, Layer, Rect, Circle } from "react-konva";
-
-//TODO FIX MOVE AND DELETE BED
+import { Stage, Layer, Rect, Circle, Group } from "react-konva";
 
 function Garden() {
   const [savedBeds, setSavedBeds] = useState([]);
@@ -19,23 +17,21 @@ function Garden() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  async function fetchBeds() {
-    console.log("fetch beds!")
-    const res = await fetch("http://localhost:3000/beds");
-    if (!res.ok) {
-      throw new Error(`Failed to fetch beds: ${res.status} ${res.statusText}`);
-    }
-
-    const data = await res.json();
-
-    if (!Array.isArray(data)) {
-      throw new Error(`Expected an array but got: ${JSON.stringify(data)}`);
-    }
-
-    setSavedBeds(data.map(b => ({ ...b, id: String(b.id) })));
-  }
-
   useEffect(() => {
+    async function fetchBeds() {
+      const res = await fetch("http://localhost:3000/beds");
+      if (!res.ok) {
+        throw new Error(`Failed to fetch beds: ${res.status} ${res.statusText}`);
+      }
+  
+      const data = await res.json();
+  
+      if (!Array.isArray(data)) {
+        throw new Error(`Expected an array but got: ${JSON.stringify(data)}`);
+      }
+  
+      setSavedBeds(data.map(b => ({ ...b, id: String(b.id) })));
+    }
     fetchBeds();
   }, [location.pathname]);
 
@@ -87,8 +83,8 @@ function Garden() {
       for (let col = 0; col < cols; col++) {
         if (count >= numSites) break;
   
-        const x = bed.x + squareX * SQUARE_SIZE + offsetX + col * spacingX + spacingX / 2;
-        const y = bed.y + squareY * SQUARE_SIZE + offsetY + row * spacingY + spacingY / 2;
+        const x = squareX * SQUARE_SIZE + offsetX + col * spacingX + spacingX / 2;
+        const y = squareY * SQUARE_SIZE + offsetY + row * spacingY + spacingY / 2;
   
         sites.push({ x, y });
         count++;
@@ -99,7 +95,6 @@ function Garden() {
   }
 
   const handleMouseDown = (e) => {
-    console.log("target", e.target)
     const stage = e.target.getStage();
     if (e.target !== stage) {
       return;
@@ -149,7 +144,7 @@ function Garden() {
     await fetch("http://localhost:3000/beds/" + bed.id, {method: "PATCH", body: JSON.stringify({x: x, y: y}),
         headers: { "Content-Type": "application/json"}});
     setNewBed(null);
-    await fetchBeds();
+    setSavedBeds(prevBeds => prevBeds.map(b => b.id === id ? { ...b, x, y } : b));
   };
 
   const snapToGrid = (value) => {
@@ -175,17 +170,21 @@ function Garden() {
         </Layer>
         <Layer>
         {savedBeds.map((b) => (
-          <React.Fragment key={b.id}>
-            <Rect
-              {...b}
-              fill="#75432a"
+          <Group key={b.id}
+              x={b.x}
+              y={b.y}
               draggable
+              onMouseDown={handleMouseDown}
               onDragEnd={(e) => handleDragEnd(e, b.id)}
               dragBoundFunc={(pos) => {
                 const x = snapToGrid(Math.max(0, Math.min(pos.x, window.innerWidth - b.width)));
                 const y = snapToGrid(Math.max(0, Math.min(pos.y, window.innerHeight - 90 - b.height)));
                 return { x, y };
-              }}
+              }}>
+            <Rect
+              x={0}
+              y={0}
+              fill="#75432a"
               onContextMenu={(e) => {
                 e.evt.preventDefault();
                 setContextMenu({
@@ -205,12 +204,11 @@ function Garden() {
               return (
                 <React.Fragment key={sq.id}>
                   <Rect
-                    x={b.x + sq.x * SQUARE_SIZE}
-                    y={b.y + sq.y * SQUARE_SIZE}
+                    x={sq.x * SQUARE_SIZE}
+                    y={sq.y * SQUARE_SIZE}
                     width={SQUARE_SIZE}
                     height={SQUARE_SIZE}
-                    fill="transparent"
-                    //listening={false}
+                    fill="#75432a"
                     onContextMenu={(e) => {
                       e.evt.preventDefault();
                       setContextMenu({
@@ -234,7 +232,7 @@ function Garden() {
                 </React.Fragment>
               );
             })}
-          </React.Fragment>
+          </Group>
         ))}
 
           {isDrawing && newBed && (
@@ -262,14 +260,12 @@ function Garden() {
             cursor: "pointer",
           }}>
             <div onClick={async () => {
-              console.log("contextmenu", contextMenu)
               await fetch("http://localhost:3000/beds/" + contextMenu.targetBedId, {method: "DELETE"});
               setSavedBeds(savedBeds.filter((b) => b.id !== contextMenu.targetBedId));
               setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquareId: null });
               }}>Delete This Bed
             </div>
             <div onClick={() => {
-              console.log("contextmenu", contextMenu)
               navigate("/planting", { state: { squareId: contextMenu.targetSquareId } });
               setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquareId: null });
               }}>Add New Planting

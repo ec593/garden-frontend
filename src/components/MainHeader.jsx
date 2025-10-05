@@ -31,6 +31,9 @@ function MainHeader() {
               </li>
             </ul>
           </div>
+          <div>
+            Garden as of: <input type="date"></input>
+          </div>
         </div>
       </nav>
     );
