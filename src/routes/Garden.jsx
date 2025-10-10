@@ -11,15 +11,17 @@ function Garden() {
     x: 0,
     y: 0,
     targetBedId: null,
-    targetSquareId: null
+    targetSquare: null
   });
   const SQUARE_SIZE = 40;
   const navigate = useNavigate();
   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const dateParam = queryParams.get("date");
 
   useEffect(() => {
     async function fetchBeds() {
-      const res = await fetch("http://localhost:3000/beds");
+      const res = await fetch("http://localhost:3000/beds" + (dateParam ? ("?date=" + encodeURIComponent(dateParam)) : ""));
       if (!res.ok) {
         throw new Error(`Failed to fetch beds: ${res.status} ${res.statusText}`);
       }
@@ -33,12 +35,12 @@ function Garden() {
       setSavedBeds(data.map(b => ({ ...b, id: String(b.id) })));
     }
     fetchBeds();
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const handleClick = () => {
       if (contextMenu.visible) {
-        setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquareId: null });
+        setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquare: null });
       }
     };
   
@@ -192,7 +194,7 @@ function Garden() {
                   x: e.evt.clientX,
                   y: e.evt.clientY,
                   targetBedId: b.id,
-                  targetSquareId: null
+                  targetSquare: null
                 });
               }}
             />
@@ -216,7 +218,7 @@ function Garden() {
                         x: e.evt.clientX,
                         y: e.evt.clientY,
                         targetBedId: b.id,
-                        targetSquareId: sq.id,
+                        targetSquare: sq
                       });
                     }}
                   />
@@ -227,6 +229,7 @@ function Garden() {
                       y={pos.y}
                       radius={4}
                       fill="green"
+                      onClick={ () => navigate("/planting/" + sq.planting.id) }
                     />
                   ))}
                 </React.Fragment>
@@ -260,16 +263,17 @@ function Garden() {
             cursor: "pointer",
           }}>
             <div onClick={async () => {
-              await fetch("http://localhost:3000/beds/" + contextMenu.targetBedId, {method: "DELETE"});
+              await fetch("http://localhost:3000/beds/" + contextMenu.targetBedId, {method: "PATCH", 
+                body: JSON.stringify({archived: new Date().toISOString()}), headers: { "Content-Type": "application/json"}});
               setSavedBeds(savedBeds.filter((b) => b.id !== contextMenu.targetBedId));
-              setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquareId: null });
+              setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquare: null });
               }}>Delete This Bed
             </div>
-            <div onClick={() => {
-              navigate("/planting", { state: { squareId: contextMenu.targetSquareId } });
-              setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquareId: null });
+            {!contextMenu.targetSquare.planting && <div onClick={() => {
+              navigate("/planting", { state: { squareId: contextMenu.targetSquare.id } });
+              setContextMenu({ visible: false, x: 0, y: 0, targetBedId: null, targetSquare: null });
               }}>Add New Planting
-            </div>
+            </div>}
         </div>
       )}
     </>

@@ -26,6 +26,9 @@ function NewSeedPacket() {
                     <label htmlFor="notes">Notes</label>
                     <textarea id="notes" name="notes" rows={3}/>
                 </p>
+                <p>
+                    <input type="hidden" id="is_empty" name="is_empty" value="false"/>
+                </p>
                 <p className={classes.actions}>
                     <Link to=".." type="button">Cancel</Link>
                     <button type="submit">Submit</button>

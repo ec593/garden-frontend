@@ -39,7 +39,18 @@ function NewPlanting() {
                     <input type="number" id="seeds_per_site" name="seeds_per_site" required/>
                 </p>
                 <p>
+                    <label htmlFor="start">Start //TODO DEFAULT HEADER DATE (URL ELSE NOW)</label>
+                    <input type="date" id="start" name="start"/>
+                </p>
+                <p>
+                    <label htmlFor="end">End</label>
+                    <input type="date" id="end" name="end"/>
+                </p>
+                <p>
                     <input type="hidden" id="sqaure_id" name="square_id" value={squareId}/>
+                </p>
+                <p>
+                    <input type="hidden" id="num_squares" name="num_squares" value={1}/>
                 </p>
                 <p className={classes.actions}>
                     <Link to=".." type="button">Cancel</Link>

@@ -4,14 +4,13 @@ import { useLoaderData } from 'react-router-dom';
 
 function SeedList({ empty }) {
     let seedPackets = useLoaderData();
-   // seedPackets = seedPackets.filter(p => ((p.isEmpty == null || !p.isEmpty) && {empty} == 'false') || (p.isEmpty && {empty} == 'true'));
 
     return (
         <>
             {seedPackets.length > 0 &&
             <ul className={classes.seed_packets}>
                 {seedPackets.map((p) => <SeedPacket key={p.id} id={p.id} seed_type={p.seed_type} name={p.name} company={p.company} year={p.year} 
-                    notes={p.notes} isEmpty={p.isEmpty}/>)}
+                    notes={p.notes} is_empty={p.is_empty}/>)}
             </ul>
             }
             {seedPackets.length === 0 && (

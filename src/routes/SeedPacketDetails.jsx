@@ -47,8 +47,9 @@ function SeedPacketDetails() {
                     <textarea id="notes" name="notes" rows={3} defaultValue={seedPacket.notes}/>
                 </p>
                 <p>
-                    <label htmlFor="empty">Empty</label>
-                    <input type="checkbox" id="empty" name="empty" defaultValue={seedPacket.isEmpty}/>
+                    <label htmlFor="is_empty">Empty</label>
+                    <input type="hidden" id="is_empty" name="is_empty" value="false" />
+                    <input type="checkbox" id="is_empty" name="is_empty" value="true" defaultChecked={seedPacket.is_empty}/>
                 </p>
                 <p>
                     <Link to=".." type="button">Cancel</Link>
@@ -64,7 +65,6 @@ export default SeedPacketDetails;
 export async function loader({params}) {
     const response = await fetch("http://localhost:3000/seed_packets/" + params.id)
     const resData = await response.json();
-    console.log(resData)
     return resData;
 }
 export async function action({request}) {
@@ -77,5 +77,5 @@ export async function action({request}) {
     await fetch("http://localhost:3000/seed_packets/" + seedPacketData.id, {method: "PUT", body: JSON.stringify(seedPacketData), 
         headers: { "Content-Type": "application/json"}});
   }
-  return redirect('/seeds');
+  return redirect('../');//TODO BUG GOING BACK TO SEEDS, NOT SEEDS/EMPTY
 }

@@ -1,13 +1,50 @@
 
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useMemo } from "react";
 import classes from './MainHeader.module.css';
 
 function MainHeader() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const dateParam = queryParams.get("date");
+
+  function toDateTimeLocalString(date = new Date()) { //TODO MAKE UTIL (REACT CONTEXT?)
+    const pad = (n) => String(n).padStart(2, "0");
+  
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  const selectedDate = useMemo(() => {
+    if (dateParam) {
+      const localDate = new Date(dateParam);
+      return toDateTimeLocalString(localDate);
+    } else {
+      return toDateTimeLocalString();
+    }
+  }, [dateParam]);
+
+  const handleDateChange = (e) => {
+    if (e.target.value) {
+      const localDate = new Date(e.target.value);
+      const utcISOString = localDate.toISOString();
+      navigate(`?date=${utcISOString}`);
+    } else {
+      navigate("/");
+    }
+  };
+
     return (
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <a className="navbar-brand" href="/"><img className={classes.mainImg} src="src/assets/images/vegetables.png" alt="vegetables" /></a>
+          <a className="navbar-brand" href="/"><img className={classes.mainImg} src="/src/assets/images/vegetables.png" alt="vegetables" /></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -32,7 +69,7 @@ function MainHeader() {
             </ul>
           </div>
           <div>
-            Garden as of: <input type="date"></input>
+            Garden as of: <input type="datetime-local" onChange={handleDateChange} value={selectedDate}></input>
           </div>
         </div>
       </nav>
