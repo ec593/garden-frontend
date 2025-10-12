@@ -1,7 +1,7 @@
 import classes from './NewSeedPacket.module.css';
 import Modal from '../components/Modal';
 import { Link, Form, redirect, useLocation } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 function NewPlanting() {
     const location = useLocation();
@@ -15,6 +15,13 @@ function NewPlanting() {
         }
         fetchSeeds();
     }, []);
+
+    const queryParams = new URLSearchParams(location.search); //TODO NEED TO PASS DATE PARAM TO /PLANTING
+    const dateParam = queryParams.get("date");
+
+    const selectedDate = useMemo(() => {
+        return new Date(dateParam ?? new Date()).toISOString().split('T')[0];
+    }, [dateParam]);
 
     return (
         <Modal>
@@ -39,8 +46,8 @@ function NewPlanting() {
                     <input type="number" id="seeds_per_site" name="seeds_per_site" required/>
                 </p>
                 <p>
-                    <label htmlFor="start">Start //TODO DEFAULT HEADER DATE (URL ELSE NOW)</label>
-                    <input type="date" id="start" name="start"/>
+                    <label htmlFor="start">Start</label>
+                    <input type="date" id="start" name="start" defaultValue={selectedDate}/>
                 </p>
                 <p>
                     <label htmlFor="end">End</label>
