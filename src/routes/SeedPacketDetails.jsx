@@ -1,6 +1,7 @@
 import { useLoaderData, Link, Form, redirect } from 'react-router-dom';
 import Modal from '../components/Modal';
 import classes from './SeedPacketDetails.module.css';
+import { SEED_TYPES } from '../util/seedTypes';
 
 function SeedPacketDetails() {
   const seedPacket = useLoaderData();
@@ -22,13 +23,20 @@ function SeedPacketDetails() {
   }
   return (
     <Modal>
-      <Form method="post">
+      <Form method="post" className={classes.form}>
                 <p>
                     <input type="hidden" id="id" name="id" value={seedPacket.id}/>
                 </p>
                 <p>
                     <label htmlFor="seed_type">Type</label>
-                    <input type="text" id="seed_type" name="seed_type" required defaultValue={seedPacket.seed_type}/>
+                    <select id="seed_type" name="seed_type" required defaultValue={seedPacket.seed_type}>
+                        <option value="">-- Select a type --</option>
+                        {SEED_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
                 </p>
                 <p>
                     <label htmlFor="name">Name</label>
@@ -71,7 +79,7 @@ export async function action({request}) {
   const formData = await request.formData();
   if (formData.get("_action") == 'delete') {
     await fetch("http://localhost:3000/seed_packets/" + formData.get("id"), {method: "DELETE"});
-  } else if (formData.get("_action") === 'update') {
+  } else if (formData.get("_action") == 'update') {
     formData.delete("_action");
     const seedPacketData = Object.fromEntries(formData);
     await fetch("http://localhost:3000/seed_packets/" + seedPacketData.id, {method: "PUT", body: JSON.stringify(seedPacketData), 

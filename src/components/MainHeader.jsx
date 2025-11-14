@@ -66,6 +66,9 @@ function MainHeader() {
                   <li><Link to="/seeds/new" className="dropdown-item" href="/seeds/new">Add New Seed Packet</Link></li>
                 </ul>
               </li>
+              <li className="nav-item">
+              <a className="nav-link active" aria-current="page" href="/calendar">Calendar</a>
+              </li>
             </ul>
           </div>
           <div>

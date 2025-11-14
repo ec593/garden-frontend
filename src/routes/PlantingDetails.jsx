@@ -1,6 +1,6 @@
 import { useLoaderData, Link, Form, redirect } from 'react-router-dom';
 import Modal from '../components/Modal';
-import classes from './SeedPacketDetails.module.css';
+import classes from './PlantingDetails.module.css';
 
 function PlantingDetails() {
   const planting = useLoaderData();
@@ -22,17 +22,10 @@ function PlantingDetails() {
   }
   return (
     <Modal>
-      <Form method="post">
+      <Form method="post" className={classes.form}>
                 <p>
                     <input type="hidden" id="id" name="id" value={planting.id}/>
-                </p>
-                <p>
-                    <input type="hidden" id="square_id" name="square_id" value={planting.square_id}/>
-                </p>
-                <p>
                     <input type="hidden" id="num_squares" name="num_squares" value={planting.num_squares}/>
-                </p>
-                <p>
                     <input type="hidden" id="seed_packet_id" name="seed_packet_id" value={planting.seed_packet_id}/>
                 </p>
                 <p>
@@ -78,10 +71,12 @@ export async function action({request}) {
   const formData = await request.formData();
   if (formData.get("_action") == 'delete') {
     await fetch("http://localhost:3000/plantings/" + formData.get("id"), {method: "DELETE"});
-  } else if (formData.get("_action") === 'update') {
+  } else if (formData.get("_action") == 'update') {
     formData.delete("_action");
+    console.log(formData);
     const plantingData = Object.fromEntries(formData);
-    await fetch("http://localhost:3000/plantings/" + seedPacketData.id, {method: "PUT", body: JSON.stringify(plantingData), 
+    console.log(plantingData);
+    await fetch("http://localhost:3000/plantings/" + plantingData.id, {method: "PUT", body: JSON.stringify(plantingData), 
         headers: { "Content-Type": "application/json"}});
   }
   return redirect('../');

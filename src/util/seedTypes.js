@@ -1,0 +1,25 @@
+export const SEED_TYPES = [
+    'Arugula',
+    'Basil',
+    'Blueberries',
+    'Broccoli',
+    'Brussels Sprouts',
+    'Carrot',
+    'Cauliflower',
+    'Chard',
+    'Chives',
+    'Cucumber',
+    'Garlic',
+    'Kale',
+    'Leek',
+    'Lettuce',
+    'Parsley',
+    'Peas',
+    'Spinach',
+    'Strawberries',
+    'Tomato',
+    'Winter Squash',
+    'Zucchini',
+    'Other'
+];
+

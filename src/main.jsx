@@ -10,8 +10,10 @@ import Nursery from "./routes/Nursery";
 import Garden from "./routes/Garden";
 import NewPlanting, { action as newPlantingAction } from "./routes/NewPlanting";
 import PlantingDetails, { loader as plantingLoader, action as updatePlantingAction } from "./routes/PlantingDetails";
+import DayPlantings, { loader as dayPlantingsLoader } from "./routes/DayPlantings";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Calendar, { loader as calendarLoader } from "./routes/Calendar";
 
 const router = createBrowserRouter([
   {path: "/", element:<App />, children: [
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
     ]},
     {path: "/seeds/empty", element: <SeedCollection/>, loader: postLoader, children: [//TODO CNVERT TO USE QUERY PARAM
       {path: "/seeds/empty/:id", loader: detailsLoader, element: <SeedPacketDetails />}
+    ]},
+    {path: "/calendar", element: <Calendar />, loader: calendarLoader, children: [
+      {path: "/calendar/day", loader: dayPlantingsLoader, element: <DayPlantings />},
+      {path: "/calendar/planting/:id", loader: plantingLoader, action: updatePlantingAction, element: <PlantingDetails />}
     ]}
   ]}
   

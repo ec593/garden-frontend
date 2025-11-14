@@ -1,6 +1,7 @@
 import classes from './NewSeedPacket.module.css';
 import Modal from '../components/Modal';
 import { Link, Form, redirect } from 'react-router-dom';
+import { SEED_TYPES } from '../util/seedTypes';
 
 function NewSeedPacket() {
     return (
@@ -8,7 +9,14 @@ function NewSeedPacket() {
             <Form method="post" className={classes.form}>
                 <p>
                     <label htmlFor="seed_type">Type</label>
-                    <input type="text" id="seed_type" name="seed_type"/>
+                    <select id="seed_type" name="seed_type" required>
+                        <option value="">-- Select a type --</option>
+                        {SEED_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
                 </p>
                 <p>
                     <label htmlFor="name">Name</label>
@@ -29,7 +37,7 @@ function NewSeedPacket() {
                 <p>
                     <input type="hidden" id="is_empty" name="is_empty" value="false"/>
                 </p>
-                <p className={classes.actions}>
+                <p>
                     <Link to=".." type="button">Cancel</Link>
                     <button type="submit">Submit</button>
                 </p>
