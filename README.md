@@ -10,5 +10,6 @@
 <a href="https://www.flaticon.com/free-icons/zucchini" title="zucchini icons">Zucchini icons created by AomAm - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/cucumber" title="cucumber icons">Cucumber icons created by Park Jisun - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/spinach" title="spinach icons">Spinach icons created by Design View - Flaticon</a>
-
-TODO: LEEK, CHARD, CARROT, PEAS, OTHER, GARLIC, WINTER SQUASH, CHIVES, PARSLEY, STRAWBERRIES, BLUEBERRIES
+<a target="_blank" href="https://icons8.com/icon/B1aBSbmMVUy2/leek">Leek, Carrot, Chard, Garlic, Squash, Parsley, Blueberry, and Strawberry</a> icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://www.freepik.com/icon/pea_1202114#fromView=search&page=1&position=4&uuid=1ec8f257-9ef1-4711-b87e-c3648803dfd6">Peas icon by Freepik</a>
+<a target="_blank" href="https://www.freepik.com/icon/spring-onion_4926330#fromView=search&page=1&position=13&uuid=68065a53-aeb3-45f0-bf2b-eb897188f10b">Chives icon by Freepik</a>

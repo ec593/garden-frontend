@@ -96,3 +96,9 @@
   background-color: #adb5bd;
 }
 
+.form h4 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #2d4a3a;
+}

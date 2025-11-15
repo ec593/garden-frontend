@@ -28,9 +28,7 @@ function PlantingDetails() {
                     <input type="hidden" id="num_squares" name="num_squares" value={planting.num_squares}/>
                     <input type="hidden" id="seed_packet_id" name="seed_packet_id" value={planting.seed_packet_id}/>
                 </p>
-                <p>
-                  <label>//TODO NEED SEED NAME AND TYPE</label>
-                </p>
+                <h4>{planting.seed_packet.seed_type} - {planting.seed_packet.name}</h4>
                 <p>
                     <label htmlFor="num_sites">Num Sites</label>
                     <input type="number" id="num_sites" name="num_sites" required defaultValue={planting.num_sites}/>
@@ -73,9 +71,7 @@ export async function action({request}) {
     await fetch("http://localhost:3000/plantings/" + formData.get("id"), {method: "DELETE"});
   } else if (formData.get("_action") == 'update') {
     formData.delete("_action");
-    console.log(formData);
     const plantingData = Object.fromEntries(formData);
-    console.log(plantingData);
     await fetch("http://localhost:3000/plantings/" + plantingData.id, {method: "PUT", body: JSON.stringify(plantingData), 
         headers: { "Content-Type": "application/json"}});
   }

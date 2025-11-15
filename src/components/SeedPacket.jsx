@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineHideSource } from "react-icons/md";
 
 function SeedPacket({ id, seed_type, name, company, year, notes, is_empty }) {
-    const iconLocation = "/src/assets/images/" + seed_type.toLowerCase().replace(" ", "-") + ".png";
+    const iconLocation = "/src/assets/images/" + (seed_type == 'Other' ? 'vegetables' : seed_type.toLowerCase().replace(" ", "-")) + ".png";
     return (
         <Link to={"/seeds/" + id} className={classes.link}>
             <div className="card" style={{width: 18 + 'rem'}}>

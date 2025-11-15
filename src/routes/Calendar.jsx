@@ -7,7 +7,6 @@ function Calendar() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const plantings = useLoaderData();
   const navigate = useNavigate();
-  console.log(plantings);
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
