@@ -38,20 +38,18 @@ function DayPlantings() {
               <th>Seeds Per Site</th>
               <th>Start</th>
               <th>End</th>
-              <th>Notes</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {plantings.map((planting) => (
               <tr key={planting.id}>
-                <td>{planting.seed_packet_name || 'N/A'}</td>
-                <td>{planting.type || 'N/A'}</td>
+                <td>{planting.seed_packet.name}</td>
+                <td>{planting.seed_packet.seed_type}</td>
                 <td>{planting.num_sites}</td>
                 <td>{planting.seeds_per_site}</td>
                 <td>{formatDate(planting.start)}</td>
                 <td>{formatDate(planting.end)}</td>
-                <td className={styles.notes}>{planting.notes || '-'}</td>
                 <td>
                   <Link 
                     to={`/calendar/planting/${planting.id}`}
